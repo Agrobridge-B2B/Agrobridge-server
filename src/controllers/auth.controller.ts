@@ -27,6 +27,16 @@ export const register = async (req: Request, res: Response) => {
             })
         }
 
+        let assignedRole: 'admin' | 'seller' | 'buyer';
+
+        const userCount = await User.countDocuments();
+        if (userCount === 0) {
+            assignedRole = 'admin';
+        } else {
+            // prevent users from assigning themselves 'admin'
+            assignedRole = role === 'seller' || role === 'buyer' ? role : 'buyer';
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const { raw, hashed } = generateCryptoToken();
@@ -36,7 +46,7 @@ export const register = async (req: Request, res: Response) => {
             email,
             password: hashedPassword,
             country,
-            role,
+            role : assignedRole,
             emailVerificationToken: hashed,
             emailVerificationExpires: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 hours from now
         });
