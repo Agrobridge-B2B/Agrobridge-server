@@ -11,7 +11,7 @@ router.get('/verify-email', verifyEmail);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 
-// Protected route example
+// Protected route example for admin only
 router.get('/admin/dashboard', protect, authorize('admin'), (req, res) => {
   res.json({ message: 'Welcome Admin!' });
 });
