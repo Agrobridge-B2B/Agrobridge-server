@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
+export type UserRole = "buyer" | "seller" | "admin";
+
+export interface IUser extends Document {
+    role: UserRole;
+    fullName: string;
+    email: string;
+    password: string;
+    country: string;
+    isVerified: boolean;
+    isBlocked: boolean;
+}
+
 const userSchema = new mongoose.Schema(
     {
         role: {
@@ -25,6 +37,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             minlength: 6,
+            select: false,
         },
 
         country: {
